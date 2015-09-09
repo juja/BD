@@ -36,12 +36,6 @@ CREATE TABLE compania_seguros(
 	nombre VARCHAR(255)
 );
 
-CREATE TYPE tipo_cedula AS ENUM ('Verde', 'azul');
-CREATE TABLE cedula(
-	id SERIAL PRIMARY KEY,
-	tipo tipo_cedula
-);
-
 CREATE TABLE antecedente_penal(
 	id SERIAL PRIMARY KEY,
 	descripcion TEXT
@@ -102,6 +96,15 @@ CREATE TABLE vehiculo(
 	FOREIGN KEY(categoria_id) REFERENCES categoria_vehiculo(id)
 );
 
+CREATE TYPE tipo_cedula AS ENUM ('Verde', 'Azul');
+CREATE TABLE conductor_habilitado(
+	conductor_dni INTEGER,
+	vehiculo_id INTEGER,
+	cedula tipo_cedula,
+	PRIMARY KEY(conductor_dni, vehiculo_id),
+	FOREIGN KEY(conductor_dni) REFERENCES conductor(dni),
+	FOREIGN KEY(vehiculo_id) REFERENCES vehiculo(id)
+);
 
 CREATE TABLE siniestro(
 	id SERIAL PRIMARY KEY,
