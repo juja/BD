@@ -1,194 +1,256 @@
-DROP SCHEMA IF EXISTS public CASCADE;
-CREATE SCHEMA IF NOT EXISTS public;
+DROP SCHEMA IF EXISTS TP;
+CREATE SCHEMA IF NOT EXISTS TP;
+USE TP;
 
-CREATE TABLE tipo_accidente(
-	id SERIAL PRIMARY KEY,
-	descripcion VARCHAR(255)
+CREATE TABLE persona(
+	dni INTEGER PRIMARY KEY,
+	nacionalidad VARCHAR(255) NOT NULL,
+	nombre VARCHAR(255) NOT NULL,
+	apellido VARCHAR(255) NOT NULL
+);
+	
+CREATE TABLE tipo_delito(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(255) NOT NULL,
+	descripcion VARCHAR(1024)
 );
 
-CREATE TABLE tipo_lugar(
-	id SERIAL PRIMARY KEY,
-	descripcion VARCHAR(255)
+CREATE TABLE antecedente(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	descripcion VARCHAR(1024),
+	fecha DATETIME NOT NULL,
+	tipo_delito_id INTEGER NOT NULL,
+	dni INTEGER NOT NULL,
+	FOREIGN KEY(tipo_delito_id) REFERENCES tipo_delito(id),
+	FOREIGN KEY(dni) REFERENCES persona(dni)
 );
 
-CREATE TABLE tipo_infraccion(
-	id SERIAL PRIMARY KEY,
-	descripcion VARCHAR(255)
+CREATE TABLE persona_con_licencia(
+	dni INTEGER PRIMARY KEY,		
+	fecha_vencimiento DATETIME
 );
 
-CREATE TABLE cobertura(
-	id SERIAL PRIMARY KEY,
-	descripcion VARCHAR(255)
+CREATE TABLE cedula_vehicular(
+	codigo INTEGER PRIMARY KEY,
+	tipo_cedula ENUM('Verde','Azul')
 );
 
 CREATE TABLE tipo_vehiculo(
-	id SERIAL PRIMARY KEY,
-	descripcion VARCHAR(255)
-);
-
-CREATE TABLE categoria_vehiculo(
-	id SERIAL PRIMARY KEY,
-	descripcion VARCHAR(255)
-);
-
-CREATE TABLE compania_seguros(
-	id SERIAL PRIMARY KEY,
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
 	nombre VARCHAR(255)
 );
 
-CREATE TABLE antecedente_penal(
-	id SERIAL PRIMARY KEY,
-	descripcion TEXT
-);
-
-CREATE TABLE persona(
-	dni integer PRIMARY KEY,
-	nombre VARCHAR(255),
-	antecedente_id integer,
-	FOREIGN KEY (antecedente_id) REFERENCES antecedente_penal(id)
-);
-
-CREATE TABLE victima(
-	dni integer PRIMARY KEY,
-	FOREIGN KEY(dni) REFERENCES persona(dni)
-);
-
-CREATE TABLE testigo(
-	dni integer PRIMARY KEY,	
-	FOREIGN KEY(dni) REFERENCES persona(dni)
-);
-
-CREATE TABLE conductor(
-	dni integer PRIMARY KEY,
-	lic_conducir VARCHAR(255),	
-	FOREIGN KEY(dni) REFERENCES persona(dni)
-);
-
-CREATE TABLE lugar(
-	id SERIAL PRIMARY KEY,
-	descripcion VARCHAR(255),
-	tipo_id INTEGER,
-	FOREIGN KEY(tipo_id) REFERENCES tipo_lugar(id)
-);
-
-CREATE TABLE autopista(
-	id INTEGER PRIMARY KEY,
-	kilometros integer,
-	FOREIGN KEY(id) REFERENCES tipo_lugar(id)
-);
-
-CREATE TABLE infraccion(
-	id SERIAL PRIMARY KEY,
-	fecha_hora TIMESTAMP WITHOUT TIME ZONE,
-	conductor_dni INTEGER NOT NULL,
-	tipo_infraccion_id INTEGER,
-	FOREIGN KEY(conductor_dni) REFERENCES conductor(dni),
-	FOREIGN KEY(tipo_infraccion_id) REFERENCES tipo_infraccion(id)
+CREATE TABLE categoria_vehiculo(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(255)
 );
 
 CREATE TABLE vehiculo(
-	id SERIAL PRIMARY KEY,
-	dominio CHAR(6) UNIQUE,
+	matricula CHAR(6) PRIMARY KEY,
 	modelo SMALLINT,
-	tipo_id integer,
-	categoria_id integer,	
+	detalle VARCHAR(1024),	
+	tipo_id INTEGER,
+	categoria_id INTEGER,
+	dni INTEGER NOT NULL,
+	FOREIGN KEY(dni) REFERENCES persona(dni),
 	FOREIGN KEY(tipo_id) REFERENCES tipo_vehiculo(id),
-	FOREIGN KEY(categoria_id) REFERENCES categoria_vehiculo(id)
+	FOREIGN KEY(categoria_id) REFERENCES categoria_vehiculo(id)	
 );
 
-CREATE TYPE tipo_cedula AS ENUM ('Verde', 'Azul');
-CREATE TABLE conductor_habilitado(
-	conductor_dni INTEGER,
-	vehiculo_id INTEGER,
-	cedula tipo_cedula,
-	PRIMARY KEY(conductor_dni, vehiculo_id),
-	FOREIGN KEY(conductor_dni) REFERENCES conductor(dni),
-	FOREIGN KEY(vehiculo_id) REFERENCES vehiculo(id)
+CREATE TABLE registro_automotor(
+	dni INTEGER NOT NULL,
+	matricula CHAR(6) NOT NULL,
+	cedula_codigo INTEGER NOT NULL,
+	PRIMARY KEY(dni,cedula_codigo),
+	FOREIGN KEY(dni) REFERENCES persona(dni),
+	FOREIGN KEY(matricula) REFERENCES vehiculo(matricula),
+	FOREIGN KEY(cedula_codigo) REFERENCES cedula_vehicular(codigo)
+);
+
+CREATE TABLE tipo_cobertura(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(255),
+	descripcion VARCHAR(1024)
+);
+
+CREATE TABLE compania_seguro(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(255),
+	descripcion VARCHAR(1024)
+);
+
+CREATE TABLE cobertura(
+	vehiculo_matricula CHAR(6) NOT NULL,
+	tipo_id INTEGER NOT NULL,
+	compania_id INTEGER NOT NULL,
+	PRIMARY KEY (vehiculo_matricula,tipo_id,compania_id),
+	
+	FOREIGN KEY(tipo_id) REFERENCES tipo_cobertura(id),
+	FOREIGN KEY(compania_id) REFERENCES compania_seguro(id)
+);
+CREATE TABLE camino(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(255),
+	longitud INTEGER
+);
+
+CREATE TABLE direccion(	
+	altura INTEGER NOT NULL,
+	camino_id INTEGER NOT NULL,
+	PRIMARY KEY(altura,camino_id),
+	FOREIGN KEY(camino_id) REFERENCES camino(id)
+);
+
+CREATE TABLE infraccion(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	descripcion VARCHAR(1024),
+	fecha DATE NOT NULL,
+	vehiculo_matricula CHAR(6) NOT NULL,
+	dni INTEGER NOT NULL,	
+	direccion_altura INTEGER NOT NULL,
+	direccion_camino_id INTEGER NOT NULL,
+	FOREIGN KEY(dni) REFERENCES persona(dni),
+	FOREIGN KEY(direccion_altura,direccion_camino_id) REFERENCES direccion(altura,camino_id),
+	FOREIGN KEY(vehiculo_matricula) REFERENCES vehiculo(matricula)
+);
+
+CREATE TABLE tipo_infraccion(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(255),
+	descripcion VARCHAR(1024)
+);
+
+CREATE TABLE tipo_accidente(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY, 
+	nombre VARCHAR(255), 
+	descripcion VARCHAR(1024)
+);
+
+CREATE TABLE tipo_falla_humana (
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(255), 
+	descripcion VARCHAR(1024)
+);
+
+CREATE TABLE comisaria(
+	numero INTEGER PRIMARY KEY,
+	direccion_altura INTEGER,
+	direccion_camino_id INTEGER,
+	FOREIGN KEY(direccion_altura,direccion_camino_id) REFERENCES direccion(altura,camino_id)
+);
+
+
+CREATE TABLE denuncia(
+	id INTEGER PRIMARY KEY,
+	fecha DATETIME,
+	comisaria_nro INTEGER NOT NULL,
+	FOREIGN KEY(comisaria_nro) REFERENCES comisaria(numero)
+); 
+
+CREATE TABLE colision(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	descripcion VARCHAR(1024)
+);
+
+CREATE TABLE tipo_peritaje(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(255),
+	descripcion VARCHAR(1024)
+);
+
+
+CREATE TABLE peritaje(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	fecha DATE,
+	descripcion TEXT,
+	conclusion TEXT,
+	tipo_peritaje_id INTEGER NOT NULL,
+	FOREIGN KEY(tipo_peritaje_id) REFERENCES tipo_peritaje(id)
 );
 
 CREATE TABLE siniestro(
-	id SERIAL PRIMARY KEY,
-	fecha_hora TIMESTAMP WITHOUT TIME ZONE,
-	lugar_id INTEGER,
-	tipo_accidente_id INTEGER,
-	FOREIGN KEY(lugar_id) REFERENCES lugar(id),
-	FOREIGN KEY(tipo_accidente_id) REFERENCES tipo_accidente(id)
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	descripcion TEXT,
+	fecha_hora DATETIME,	
+	tipo_falla_id INTEGER NOT NULL,
+	tipo_accidente_id INTEGER NOT NULL, 
+	denuncia_id INTEGER NOT NULL,
+	colision_id INTEGER NOT NULL,
+	direccion_altura INTEGER NOT NULL,
+	direccion_camino_id INTEGER NOT NULL,
+	FOREIGN KEY(tipo_accidente_id) REFERENCES tipo_accidente(id),
+	FOREIGN KEY(tipo_falla_id) REFERENCES tipo_falla_humana(id),
+	FOREIGN KEY(denuncia_id) REFERENCES denuncia(id),
+	FOREIGN KEY(colision_id) REFERENCES colision(id),
+	FOREIGN KEY(direccion_altura,direccion_camino_id) REFERENCES direccion(altura,camino_id)
 );
 
-CREATE TABLE victima_siniestro(
-	victima_dni INTEGER,
-	siniestro_id INTEGER,	
-	usa_cinturon BOOLEAN,
-	PRIMARY KEY(victima_dni,siniestro_id),
-	FOREIGN KEY(victima_dni) REFERENCES victima(dni),
-	FOREIGN KEY(siniestro_id) REFERENCES siniestro(id)
-);
-
-CREATE TABLE testigo_siniestro(
-	testigo_dni INTEGER,
-	siniestro_id INTEGER,
-	PRIMARY KEY(testigo_dni,siniestro_id),
-	FOREIGN KEY(testigo_dni) REFERENCES testigo(dni),
-	FOREIGN KEY(siniestro_id) REFERENCES siniestro(id)
-);
-
-CREATE TABLE conductor_vehiculo_siniestro(
-	siniestro_id INTEGER,
-	conductor_dni INTEGER,
-	vehiculo_id INTEGER,
-	PRIMARY KEY(conductor_dni,siniestro_id),
-	FOREIGN KEY(siniestro_id) REFERENCES siniestro(id),
-	FOREIGN KEY(conductor_dni) REFERENCES conductor(dni),
-	FOREIGN KEY(vehiculo_id) REFERENCES vehiculo(id)
-);
-
-CREATE TABLE persona_antecedente_penal(
-	dni INTEGER,
-	antecedente_penal_id INTEGER,
-	PRIMARY KEY(dni,antecedente_penal_id),
-	FOREIGN KEY(dni) REFERENCES persona(dni),
-	FOREIGN KEY(antecedente_penal_id) REFERENCES antecedente_penal(id)
-);
-
-CREATE TABLE vehiculo_compania_cobertura(
-	vehiculo_id INTEGER,
-	compania_seguros_id INTEGER,
-	cobertura_id INTEGER,
-	PRIMARY KEY(vehiculo_id,cobertura_id),
-	FOREIGN KEY(vehiculo_id) REFERENCES vehiculo(id),
-	FOREIGN KEY(compania_seguros_id) REFERENCES compania_seguros(id),
-	FOREIGN KEY(cobertura_id) REFERENCES cobertura(id)
-);
-
-CREATE TABLE tipo_colision(
-	id SERIAL PRIMARY KEY,
-	descripcion VARCHAR(255)
-);
-
-CREATE TABLE siniestro_tipo_colision(
-	siniestro_id INTEGER,
-	tipo_colision_id INTEGER,
-	PRIMARY KEY(siniestro_id,tipo_colision_id),
-	FOREIGN KEY(siniestro_id) REFERENCES siniestro(id),
-	FOREIGN KEY(tipo_colision_id) REFERENCES tipo_colision(id)
-);
-
-
-CREATE TABLE informe(
-	id SERIAL PRIMARY KEY,
-	causa_presunta TEXT,
-	iluminacion VARCHAR(255),
-	condicion_via VARCHAR(255),
-	condicion_climatica VARCHAR(255),
-	tipo_pavimento varchar(50),
+CREATE TABLE conclusion(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	conclusion_final TEXT,
 	siniestro_id INTEGER NOT NULL,
 	FOREIGN KEY(siniestro_id) REFERENCES siniestro(id)
 );
 
-CREATE TABLE denuncia_policial(
-	id SERIAL PRIMARY KEY,
-	descripcion TEXT,
-	siniestro_id INTEGER,
+CREATE TABLE victima(
+	conclusion_id INTEGER NOT NULL,
+	dni INTEGER NOT NULL,
+	PRIMARY KEY(conclusion_id,dni),
+	FOREIGN KEY(conclusion_id) REFERENCES conclusion(id),
+	FOREIGN KEY(dni) REFERENCES persona(dni)
+);
+
+CREATE TABLE victimario(
+	conclusion_id INTEGER NOT NULL,
+	dni INTEGER NOT NULL,
+	PRIMARY KEY(conclusion_id,dni),
+	FOREIGN KEY(conclusion_id) REFERENCES conclusion(id),
+	FOREIGN KEY(dni) REFERENCES persona(dni)
+);
+
+CREATE TABLE testigos(
+	siniestro_id INTEGER NOT NULL,
+	dni INTEGER NOT NULL,
+	FOREIGN KEY(dni) REFERENCES persona(dni),
 	FOREIGN KEY(siniestro_id) REFERENCES siniestro(id)
 );
+
+CREATE TABLE provincia(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(255)
+);
+
+CREATE TABLE localidad(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(255),
+	provincia_id INTEGER NOT NULL,
+	FOREIGN KEY(provincia_id) REFERENCES provincia(id)
+);
+
+CREATE TABLE registro_calles(
+	camino_id INTEGER NOT NULL,
+	localidad_id INTEGER NOT NULL,
+	altura_desde INTEGER NOT NULL,
+	altura_hasta INTEGER NOT NULL,
+	PRIMARY KEY(camino_id,localidad_id),
+	FOREIGN KEY(camino_id) REFERENCES camino(id),
+	FOREIGN KEY(localidad_id) REFERENCES localidad(id)
+);
+
+CREATE TABLE tipo_camino(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(255)
+);
+
+CREATE TABLE clasificacion_camino(
+	camino_id INTEGER NOT NULL,
+	tipo_id INTEGER NOT NULL,
+	altura_hasta INTEGER NOT NULL,
+	altura_desde INTEGER NOT NULL,
+	longitud INTEGER NOT NULL,
+	PRIMARY KEY(camino_id,tipo_id,altura_desde,altura_hasta),
+	FOREIGN KEY(camino_id) REFERENCES camino(id),
+	FOREIGN KEY(tipo_id) REFERENCES tipo_camino(id)
+);
+
 
