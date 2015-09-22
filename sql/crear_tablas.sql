@@ -27,7 +27,8 @@ CREATE TABLE antecedente(
 
 CREATE TABLE persona_con_licencia(
 	dni INTEGER PRIMARY KEY,		
-	fecha_vencimiento DATETIME
+	fecha_vencimiento DATETIME,
+    FOREIGN KEY(dni) REFERENCES persona(dni)
 );
 
 CREATE TABLE cedula_vehicular(
