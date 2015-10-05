@@ -1,67 +1,114 @@
-persona(dni PRIMARY KEY,nacionalidad,nombre,apellido)
-tipo_delito(id PRIMARY KEY,nombre,descripcion)
+persona(dni,nacionalidad,nombre,apellido)
+CK=PK=dni
 
-antecedente(id PRIMARY KEY,descripcion,fecha,tipo_delito_id,dni,FOREIGN KEY(tipo_delito_id) REFERENCES tipo_delito(id),FOREIGN KEY(dni) REFERENCES persona(dni))
+tipo_delito(id,nombre,descripcion)
+CK=PK=id
 
-persona_con_licencia(dni PRIMARY KEY,		fecha_vencimiento)
+antecedente(id,descripcion,fecha,tipo_delito_id,dni,FOREIGN KEY(tipo_delito_id) REFERENCES tipo_delito(id),FOREIGN KEY(dni) REFERENCES persona(dni))
+CK=PK=id
 
-cedula_vehicular(codigo PRIMARY KEY,tipo_cedula ENUM('Verde','Azul'))
+persona_con_licencia(dni,fecha_vencimiento)
+CK=PK=dni
 
-tipo_vehiculo(id PRIMARY KEY,nombre)
+cedula_vehicular(codigo,tipo_cedula)
+CK=PK=codigo
 
-categoria_vehiculo(id PRIMARY KEY,nombre)
+tipo_vehiculo(id,nombre)
+CK=PK=id
 
-vehiculo(matricula PRIMARY KEY,modelo SMALLINT,detalle,	tipo_id,categoria_id,dni,FOREIGN KEY(dni) REFERENCES persona(dni),FOREIGN KEY(tipo_id) REFERENCES tipo_vehiculo(id),FOREIGN KEY(categoria_id) REFERENCES categoria_vehiculo(id)	)
+categoria_vehiculo(id,nombre)
+CK=PK=id
 
-registro_automotor(dni,matricula,cedula_codigo,PRIMARY KEY(dni,cedula_codigo),FOREIGN KEY(dni) REFERENCES persona(dni),FOREIGN KEY(matricula) REFERENCES vehiculo(matricula),FOREIGN KEY(cedula_codigo) REFERENCES cedula_vehicular(codigo))
+vehiculo(matricula,modelo,detalle,tipo_id,categoria_id,dni)
+CK=PK=matricula
+FK={dni,tipo_id,categoria_id}
 
-tipo_cobertura(id PRIMARY KEY,nombre,descripcion)
+registro_automotor(dni,matricula,cedula_codigo)
+CK=PK=(dni,cedula_codigo)
+FK={dni,matricula,cedula_codigo}
 
-compania_seguro(id PRIMARY KEY,nombre,descripcion)
+tipo_cobertura(id,nombre,descripcion)
+CK=PK=id
 
-cobertura(vehiculo_matricula,tipo_id,compania_id,PRIMARY KEY (vehiculo_matricula,tipo_id,compania_id),FOREIGN KEY(tipo_id) REFERENCES tipo_cobertura(id),FOREIGN KEY(compania_id) REFERENCES compania_seguro(id))
-camino(id PRIMARY KEY,nombre,longitud)
+compania_seguro(id,nombre,descripcion)
+CK=PK=id
 
-direccion(	altura,camino_id,PRIMARY KEY(altura,camino_id),FOREIGN KEY(camino_id) REFERENCES camino(id))
+cobertura(vehiculo_matricula,tipo_id,compania_id)
+CK=PK=(vehiculo_matricula,tipo_id,compania_id)
+FK={vehiculo_matricula,tipo_id,compania_id}
 
-infraccion(id PRIMARY KEY,descripcion,fecha,vehiculo_matricula,dni,	direccion_altura,direccion_camino_id,FOREIGN KEY(dni) REFERENCES persona(dni),FOREIGN KEY(direccion_altura,direccion_camino_id) REFERENCES direccion(altura,camino_id),FOREIGN KEY(vehiculo_matricula) REFERENCES vehiculo(matricula))
+camino(id,nombre,longitud)
+CK=PK=id
 
-tipo_infraccion(id PRIMARY KEY,nombre,descripcion)
+direccion(altura,camino_id)
+CK=PK=(altura,camino_id)
+FK{camino_id}
 
-tipo_accidente(id PRIMARY KEY, nombre, descripcion)
+infraccion(id,descripcion,fecha,vehiculo_matricula,dni,	direccion_altura,direccion_camino_id)
+CK=PK=id
+FK={dni,(direccion_altura,direccion_camino_id),vehiculo_matricula}
 
-tipo_falla_humana (id PRIMARY KEY,nombre, descripcion)
+tipo_infraccion(id,nombre,descripcion)
+CK=PK=id
 
-comisaria(numero PRIMARY KEY,direccion_altura,direccion_camino_id,FOREIGN KEY(direccion_altura,direccion_camino_id) REFERENCES direccion(altura,camino_id))
+tipo_accidente(id, nombre, descripcion)
+CK=PK=id
 
+tipo_falla_humana (id,nombre, descripcion)
+CK=PK=id
 
-denuncia(id PRIMARY KEY,fecha,comisaria_nro,FOREIGN KEY(comisaria_nro) REFERENCES comisaria(numero)) 
+comisaria(numero,direccion_altura,direccion_camino_id)
+CK=PK=numero
+FK={(direccion_altura,direccion_camino_id)}
 
-colision(id PRIMARY KEY,descripcion)
+denuncia(id,fecha,comisaria_nro) 
+CK=PK=id
+FK={comisaria_nro}
 
-tipo_peritaje(id PRIMARY KEY,nombre,descripcion)
+colision(id,descripcion)
+CK=PK=id
 
+tipo_peritaje(id,nombre,descripcion)
+CK=PK=id
 
-peritaje(id PRIMARY KEY,fecha,descripcion,conclusion,tipo_peritaje_id,FOREIGN KEY(tipo_peritaje_id) REFERENCES tipo_peritaje(id))
+peritaje(id,fecha,descripcion,conclusion,tipo_peritaje_id)
+CK=PK=id
+FK={tipo_peritaje_id}
 
-siniestro(id PRIMARY KEY,descripcion,fecha_hora,	tipo_falla_id,tipo_accidente_id, denuncia_id,colision_id,direccion_altura,direccion_camino_id,FOREIGN KEY(tipo_accidente_id) REFERENCES tipo_accidente(id),FOREIGN KEY(tipo_falla_id) REFERENCES tipo_falla_humana(id),FOREIGN KEY(denuncia_id) REFERENCES denuncia(id),FOREIGN KEY(colision_id) REFERENCES colision(id),FOREIGN KEY(direccion_altura,direccion_camino_id) REFERENCES direccion(altura,camino_id))
+siniestro(id,descripcion,fecha_hora,tipo_falla_id,tipo_accidente_id, denuncia_id,colision_id,direccion_altura,direccion_camino_id)
+CK=PK=id
+FK={tipo_accidente_id,tipo_falla_id,denuncia_id,colision_id,(direccion_altura,direccion_camino_id)}
 
-conclusion(id PRIMARY KEY,conclusion_final,siniestro_id,FOREIGN KEY(siniestro_id) REFERENCES siniestro(id))
+conclusion(id,conclusion_final,siniestro_id)
+CK=PK=id
+FK={siniestro_id}
 
-victima(conclusion_id,dni,PRIMARY KEY(conclusion_id,dni),FOREIGN KEY(conclusion_id) REFERENCES conclusion(id),FOREIGN KEY(dni) REFERENCES persona(dni))
+victima(conclusion_id,dni)
+CK=PK=(conclusion_id,dni)
+FK={conclusion_id,dni}
 
-victimario(conclusion_id,dni,PRIMARY KEY(conclusion_id,dni),FOREIGN KEY(conclusion_id) REFERENCES conclusion(id),FOREIGN KEY(dni) REFERENCES persona(dni))
+victimario(conclusion_id,dni)
+CK=PK=(conclusion_id,dni)
+FK={conclusion_id,dni}
 
-testigos(siniestro_id,dni,FOREIGN KEY(dni) REFERENCES persona(dni),FOREIGN KEY(siniestro_id) REFERENCES siniestro(id))
+testigos(siniestro_id,dni)
+CK=FK=(siniestro_id,dni)
+FK={dni,siniestro_id}
 
-provincia(id PRIMARY KEY,nombre)
+provincia(id,nombre)
+CK=PK=id
 
-localidad(id PRIMARY KEY,nombre,provincia_id,FOREIGN KEY(provincia_id) REFERENCES provincia(id))
+localidad(id,nombre,provincia_id)
+CK=PK=id
+FK={provincia_id}
 
-registro_calles(camino_id,localidad_id,altura_desde,altura_hasta,PRIMARY KEY(camino_id,localidad_id),FOREIGN KEY(camino_id) REFERENCES camino(id),FOREIGN KEY(localidad_id) REFERENCES localidad(id))
+registro_calles(camino_id,localidad_id,altura_desde,altura_hasta)
+CK=PK=(camino_id,localidad_id)
+FK={camino_id,localidad_id}
 
-tipo_camino(id PRIMARY KEY,nombre)
+tipo_camino(id,nombre)
+CK=PK=id
 
-clasificacion_camino(camino_id,tipo_id,altura_hasta,altura_desde,longitud,PRIMARY KEY(camino_id,tipo_id,altura_desde,altura_hasta),FOREIGN KEY(camino_id) REFERENCES camino(id),FOREIGN KEY(tipo_id) REFERENCES tipo_camino(id))
-
-
+clasificacion_camino(camino_id,tipo_id,altura_hasta,altura_desde,longitud)
+CK=PK=(camino_id,tipo_id,altura_desde,altura_hasta)
+FK={camino_id,tipo_id}

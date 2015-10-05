@@ -86,6 +86,7 @@ CREATE TABLE cobertura(
 	compania_id INTEGER NOT NULL,
 	PRIMARY KEY (vehiculo_matricula,tipo_id,compania_id),
 	
+	FOREIGN KEY(vehiculo_matricula) REFERENCES vehiculo(matricula),
 	FOREIGN KEY(tipo_id) REFERENCES tipo_cobertura(id),
 	FOREIGN KEY(compania_id) REFERENCES compania_seguro(id)
 );
@@ -212,6 +213,7 @@ CREATE TABLE victimario(
 CREATE TABLE testigos(
 	siniestro_id INTEGER NOT NULL,
 	dni INTEGER NOT NULL,
+	PRIMARY KEY(siniestro_id,dni),
 	FOREIGN KEY(dni) REFERENCES persona(dni),
 	FOREIGN KEY(siniestro_id) REFERENCES siniestro(id)
 );
