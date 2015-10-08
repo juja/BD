@@ -14,5 +14,13 @@ class Cedula_vehicular extends Model
         return $this->hasMany('App\Registro_automotor','cedula_codigo','codigo');
     }
 
+    public function vehiculo_registro(){
+        return $this->belongsToMany('App\Vehiculo','registro_automotor','codigo','matricula');
+    }
+
+    public function persona_registro(){
+        return $this->belongsToMany('App\Persona','registro_automotor','codigo','dni');
+    }
+
     //
 }

@@ -15,7 +15,7 @@ class Vehiculo extends Model
     }
 
     public function tipo(){
-        return $this->belongsTo('App\Tipo_vehiculo');
+        return $this->belongsTo('App\Tipo_vehiculo','tipo_id');
     }
 
     public function categoria(){
@@ -29,6 +29,20 @@ class Vehiculo extends Model
     public function tipo_cobertura(){
         return $this->belongsToMany('App\Tipo_cobertura','cobertura','vehiculo_matricula','tipo_id');
     }
+
+    public function personas_registro(){
+        return $this->belongsToMany('App\Persona','registro_automotor','matricula','dni');
+    }
+
+    public function cedulas_registro(){
+        return $this->belongsToMany('App\Cedula_vehicular','registro_automotor','matricula','cedula_codigo');
+    }
+
+    public function infracciones(){
+        return $this->hasMany('App\Infraccion','matricula','vehiculo_matricula');
+    }
+
+
 
 
     //

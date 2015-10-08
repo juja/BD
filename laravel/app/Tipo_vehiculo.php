@@ -10,7 +10,7 @@ class Tipo_vehiculo extends Model
     protected $table = 'tipo_vehiculo';
 
     public function vehiculos(){
-        return $this->hasMany('App\Vehiculo');
+        return $this->hasMany('App\Vehiculo','id','tipo_id');
     }
     //
 }

@@ -15,7 +15,29 @@ class Direccion extends Model
     }
 
     public function infracciones_camino(){
-        return $this->hasMany('App\Infraccion','altura','direccion_altura');
+        return $this->hasMany('App\Infraccion','camino_id','direccion_camino_id');
     }
+
+    public function siniestro_altura(){
+        return $this->hasMany('App\Siniestro','altura','direccion_altura');
+    }
+
+    public function siniestro_camino(){
+        return $this->hasMany('App\Siniestro','camino_id','direccion_camino_id');
+    }
+
+    public function comisaria_altura(){
+        return $this->hasMany('App\Comisaria','altura','direccion_altura');
+    }
+
+    public function comisaria_camino(){
+        return $this->hasMany('App\Comisaria','camino_id','direccion_camino_id');
+    }
+
+    public function camino(){
+        return $this->belongsTo('App\Camino','camino_id');
+    }
+
+
     //
 }
