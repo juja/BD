@@ -14,7 +14,7 @@ class Antecedente extends Model
     }
 
     public function persona(){
-        return $this->hasOne('App\Persona','dni','dni');
+        return $this->belongsTo('App\Persona','dni','dni');
     }
 
 }

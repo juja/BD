@@ -13,8 +13,8 @@ class Localidad extends Model
         return $this->belongsTo('App\Provincia','provincia_id');
     }
 
-    public function registro_calles(){
-        return $this->hasMany('App\Registro_calles','id','localidad_id');
+    public function caminos(){
+        return $this->belongsToMany('App\Camino','registro_calles');
     }
     //
 }

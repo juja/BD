@@ -9,8 +9,9 @@ class Vehiculo extends Model
     public $timestamps = false;
     protected $table = 'vehiculo';
     protected $primaryKey = 'matricula';
+    public $incrementing = false;
 
-    public function persona(){
+    public function dueno(){
         return $this->belongsTo('App\Persona','dni','dni');
     }
 
@@ -39,7 +40,11 @@ class Vehiculo extends Model
     }
 
     public function infracciones(){
-        return $this->hasMany('App\Infraccion','matricula','vehiculo_matricula');
+        return $this->hasMany('App\Infraccion','vehiculo_matricula');
+    }
+
+    public function siniestros(){
+        return $this->belongsToMany('App\Siniestro','involucrados');
     }
 
 

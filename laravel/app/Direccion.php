@@ -9,6 +9,7 @@ class Direccion extends Model
     public $timestamps = false;
     protected $table = 'direccion';
     protected $primaryKey = 'altura';
+    public $incrementing = false;
 
     public function infracciones_altura(){
         return $this->hasMany('App\Infraccion','altura','direccion_altura');

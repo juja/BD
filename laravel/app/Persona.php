@@ -9,9 +9,10 @@ class Persona extends Model
     public $timestamps = false;
     protected $table = 'persona';
     protected $primaryKey = 'dni';
+    public $incrementing = false;
 
     public function antecedentes(){
-        return $this->hasMany('App\Antecedente', 'dni');
+        return $this->hasMany('App\Antecedente', 'dni', 'dni');
     }
 
     public function persona_con_licencia(){
@@ -34,8 +35,8 @@ class Persona extends Model
         return $this->belongsToMany('App\Cedula_vehicular','registro_automotor','dni','cedula_codigo');
     }
 
-    public function testigos(){
-        return $this->hasMany('App\Testigos','dni','dni');
+    public function siniestros_testigo(){
+        return $this->belongsToMany('App\Siniestro','dni','siniestro_id');
     }
 
     public function victimarios(){
@@ -44,6 +45,10 @@ class Persona extends Model
 
     public function victimas(){
         return $this->hasMany('App\Victima','dni','dni');
+    }
+
+    public function siniestros(){
+        return $this->belongsToMany('App\Siniestro','involucrados');
     }
 
 

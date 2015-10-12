@@ -12,5 +12,9 @@ class Peritaje extends Model
     public function tipo_peritaje(){
         return $this->belongsTo('App\Tipo_peritaje');
     }
+
+    public function siniestro(){
+        return $this->belongsTo('App\Siniestro');
+    }
     //
 }

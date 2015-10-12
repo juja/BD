@@ -9,11 +9,11 @@ class Infraccion extends Model
     public $timestamps = false;
     protected $table = 'infraccion';
 
-    public function direccion_altura(){
+    public function dir_altura(){
         return $this->belongsTo('App\Direccion','direccion_altura','altura');
     }
 
-    public function direccion_camino(){
+    public function dir_camino(){
         return $this->belongsTo('App\Direccion','direccion_camino_id','camino_id');
     }
 

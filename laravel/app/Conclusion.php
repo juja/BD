@@ -14,11 +14,11 @@ class Conclusion extends Model
     }
 
     public function victima(){
-        return $this->hasMany('App\Victima');
+        return $this->belongsToMany('App\Persona','victima','conclusion_id','dni');
     }
 
     public function victimario(){
-        return $this->hasMany('App\Victimario');
+        return $this->belongsToMany('App\Persona','victimario','conclusion_id','dni');
     }
     //
 }

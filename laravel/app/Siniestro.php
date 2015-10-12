@@ -10,15 +10,15 @@ class Siniestro extends Model
     protected $table = 'siniestro';
 
     public function testigos(){
-        return $this->hasMany('App\Testigos');
+        return $this->belongsToMany('App\Persona','testigos','siniestro_id','dni');
     }
 
     public function conclusiones(){
         return $this->hasMany('App\Conclusion');
     }
 
-    public function tipo_falla_humana(){
-        return $this->belongsTo('App\Tipo_falla_huamana','tipo_falla_id');
+    public function tipoFallaHumana(){
+        return $this->belongsTo('App\Tipo_falla_humana','tipo_falla_id');
     }
 
     public function tipo_accidente(){
@@ -33,12 +33,20 @@ class Siniestro extends Model
         return $this->belongsTo('App\Colision');
     }
 
-    public function direccion_altura(){
+    public function dir_altura(){
         return $this->belongsTo('App\Direccion','direccion_altura','altura');
     }
 
-    public function direccion_camino(){
+    public function dir_camino(){
         return $this->belongsTo('App\Direccion','direccion_camino_id','camino_id');
+    }
+
+    public function peritajes(){
+        return $this->hasMany('App\Peritaje');
+    }
+
+    public function vehiculos_involucrados(){
+        return $this->belongsToMany('App\Vehiculo','involucrados');
     }
 
 

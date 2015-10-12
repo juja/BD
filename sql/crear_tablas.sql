@@ -143,7 +143,7 @@ CREATE TABLE comisaria(
 
 
 CREATE TABLE denuncia(
-	id INTEGER PRIMARY KEY,
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
 	fecha DATETIME,
 	comisaria_nro INTEGER NOT NULL,
 	FOREIGN KEY(comisaria_nro) REFERENCES comisaria(numero)
@@ -158,16 +158,6 @@ CREATE TABLE tipo_peritaje(
 	id INTEGER AUTO_INCREMENT PRIMARY KEY,
 	nombre VARCHAR(255),
 	descripcion VARCHAR(1024)
-);
-
-
-CREATE TABLE peritaje(
-	id INTEGER AUTO_INCREMENT PRIMARY KEY,
-	fecha DATE,
-	descripcion TEXT,
-	conclusion TEXT,
-	tipo_peritaje_id INTEGER NOT NULL,
-	FOREIGN KEY(tipo_peritaje_id) REFERENCES tipo_peritaje(id)
 );
 
 CREATE TABLE siniestro(
@@ -185,6 +175,26 @@ CREATE TABLE siniestro(
 	FOREIGN KEY(denuncia_id) REFERENCES denuncia(id),
 	FOREIGN KEY(colision_id) REFERENCES colision(id),
 	FOREIGN KEY(direccion_altura,direccion_camino_id) REFERENCES direccion(altura,camino_id)
+);
+
+CREATE TABLE peritaje(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	fecha DATE,
+	descripcion TEXT,
+	conclusion TEXT,
+	tipo_peritaje_id INTEGER NOT NULL,
+	siniestro_id INTEGER NOT NULL,
+	FOREIGN KEY(tipo_peritaje_id) REFERENCES tipo_peritaje(id),
+	FOREIGN KEY(siniestro_id) REFERENCES siniestro(id)
+);
+
+CREATE TABLE involucrados(
+	siniestro_id INTEGER NOT NULL,
+	vehiculo_matricula CHAR(6) NOT NULL,
+	persona_dni INTEGER NOT NULL,
+	FOREIGN KEY(siniestro_id) REFERENCES siniestro(id),
+	FOREIGN KEY(vehiculo_matricula) REFERENCES vehiculo(matricula),
+	FOREIGN KEY(persona_dni) REFERENCES persona(dni)
 );
 
 CREATE TABLE conclusion(

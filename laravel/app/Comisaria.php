@@ -7,15 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Comisaria extends Model
 {
     public $timestamps = false;
-    protected $table = 'colision';
+    protected $table = 'comisaria';
     protected $primaryKey = 'numero';
+    public $incrementing = false;
 
-    public function direccion_altura(){
-        return $this->belongsTo('App\Direccion','altura','direccion_altura');
+    public function dir_altura(){
+        return $this->belongsTo('App\Direccion','direccion_altura','altura');
     }
 
-    public function direccion_camino(){
-        return $this->belongsTo('App\Direccion','camino_id','direccion_camino_id');
+    public function dir_camino(){
+        return $this->belongsTo('App\Direccion','direccion_camino_id','camino_id');
     }
 
     public function denuncias(){
