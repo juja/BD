@@ -68,9 +68,10 @@ class SiniestroTableSeeder extends Seeder {
 
             //Creo direccion
             $d = new App\Direccion;
-            $c = App\Camino::orderByRaw("RAND()")->first();
-            $d->altura = $f->numberBetween(0, $c->longitud);
-            $d->camino()->associate($c);
+            $c = App\Camino::orderByRaw("RAND()")->take(2)->get();
+            $d->altura = $f->numberBetween(0, $c[0]->longitud);
+            $d->camino()->associate($c[0]);
+            $d->esquina()->associate($c[1]);
             $d->save();
             //Fin direccion
 
@@ -165,9 +166,10 @@ class VehiculoInfraccionTableSeeder extends Seeder {
                 $i->persona()->associate($v->dueno);
                 $i->vehiculo()->associate($v);
                 $d = new App\Direccion;
-                $c = App\Camino::orderByRaw("RAND()")->first();
-                $d->altura = $f->numberBetween(0, $c->longitud);
-                $d->camino()->associate($c);
+                $c = App\Camino::orderByRaw("RAND()")->take(2)->get();
+                $d->altura = $f->numberBetween(0, $c[0]->longitud);
+                $d->camino()->associate($c[0]);
+                $d->esquina()->associate($c[1]);
                 $d->save();
                 $i->dir_altura()->associate($d);
                 $i->dir_camino()->associate($d);
@@ -262,11 +264,12 @@ class ComisariaTableSeeder extends Seeder {
         $f = Faker\Factory::create('es_AR');
 
         for($i=0;$i<10;$i++) {
-            $c = App\Camino::orderByRaw("RAND()")->first();
+            $c = App\Camino::orderByRaw("RAND()")->take(2)->get();
 
             $d = new App\Direccion();
-            $d->altura = $f->numberBetween(0,$c->longitud);
-            $d->camino()->associate($c);
+            $d->altura = $f->numberBetween(0,$c[0]->longitud);
+            $d->camino()->associate($c[0]);
+            $d->esquina()->associate($c[1]);
             $d->save();
 
 
@@ -281,10 +284,8 @@ class ComisariaTableSeeder extends Seeder {
 
 class CaminoTableSeeder extends Seeder {
     public function run() {
-
         //DB::table('camino')->delete();
 
-        //DB::statement('alter table camino AUTO_INCREMENT = 1');
         $f = Faker\Factory::create('es_AR');
         $ls = App\Localidad::all();
         foreach ($ls as $i => $l) {

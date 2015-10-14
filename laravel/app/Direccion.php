@@ -39,6 +39,10 @@ class Direccion extends Model
         return $this->belongsTo('App\Camino','camino_id');
     }
 
+    public function esquina(){
+        return $this->belongsTo('App\Camino','esquina_camino_id');
+    }
+
 
     //
 }

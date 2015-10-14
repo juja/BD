@@ -20,6 +20,10 @@ SET time_zone = "+00:00";
 -- Table structure for table `antecedente`
 --
 
+DROP SCHEMA IF EXISTS TP;
+CREATE SCHEMA IF NOT EXISTS TP;
+USE TP;
+
 CREATE TABLE `antecedente` (
   `id` int(11) NOT NULL,
   `descripcion` varchar(1024) DEFAULT NULL,

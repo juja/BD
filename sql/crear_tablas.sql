@@ -99,8 +99,10 @@ CREATE TABLE camino(
 CREATE TABLE direccion(	
 	altura INTEGER NOT NULL,
 	camino_id INTEGER NOT NULL,
+	esquina_camino_id INTEGER NOT NULL,
 	PRIMARY KEY(altura,camino_id),
-	FOREIGN KEY(camino_id) REFERENCES camino(id)
+	FOREIGN KEY(camino_id) REFERENCES camino(id),
+	FOREIGN KEY(esquina_camino_id) REFERENCES camino(id)
 );
 
 CREATE TABLE infraccion(
