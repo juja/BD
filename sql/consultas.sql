@@ -57,3 +57,27 @@ BEGIN
 	order by s.id;
 END //
 
+
+//
+CREATE PROCEDURE `incurrencia_tipo_accidente` (IN tipo varchar(255))
+BEGIN
+	SELECT
+		p.dni,
+		count(p.dni)
+	FROM
+		persona p
+			INNER JOIN
+		testigos AS t ON t.dni = p.dni
+			INNER JOIN
+		involucrados AS i ON i.persona_dni = p.dni
+			INNER JOIN
+		siniestro as s on s.id = i.siniestro_id
+			OR s.id = t.siniestro_id
+			INNER JOIN
+		tipo_accidente AS ta ON ta.id = s.tipo_accidente_id
+
+	where
+		ta.nombre = tipo
+	group by p.dni, s.id
+	order by count(p.dni) DESC;
+END //
