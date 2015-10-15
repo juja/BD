@@ -105,6 +105,12 @@ CREATE TABLE direccion(
 	FOREIGN KEY(esquina_camino_id) REFERENCES camino(id)
 );
 
+CREATE TABLE tipo_infraccion(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(255),
+	descripcion VARCHAR(1024)
+);
+
 CREATE TABLE infraccion(
 	id INTEGER AUTO_INCREMENT PRIMARY KEY,
 	descripcion VARCHAR(1024),
@@ -113,15 +119,11 @@ CREATE TABLE infraccion(
 	dni INTEGER NOT NULL,	
 	direccion_altura INTEGER NOT NULL,
 	direccion_camino_id INTEGER NOT NULL,
+	tipo_infraccion_id INTEGER NOT NULL,
+	FOREIGN KEY(tipo_infraccion_id) REFERENCES tipo_infraccion(id),
 	FOREIGN KEY(dni) REFERENCES persona(dni),
 	FOREIGN KEY(direccion_altura,direccion_camino_id) REFERENCES direccion(altura,camino_id),
 	FOREIGN KEY(vehiculo_matricula) REFERENCES vehiculo(matricula)
-);
-
-CREATE TABLE tipo_infraccion(
-	id INTEGER AUTO_INCREMENT PRIMARY KEY,
-	nombre VARCHAR(255),
-	descripcion VARCHAR(1024)
 );
 
 CREATE TABLE tipo_accidente(
@@ -137,12 +139,12 @@ CREATE TABLE tipo_falla_humana (
 );
 
 CREATE TABLE comisaria(
-	numero INTEGER PRIMARY KEY,
+	numero INTEGER,
 	direccion_altura INTEGER,
 	direccion_camino_id INTEGER,
+	PRIMARY KEY(numero, direccion_altura, direccion_camino_id),
 	FOREIGN KEY(direccion_altura,direccion_camino_id) REFERENCES direccion(altura,camino_id)
 );
-
 
 CREATE TABLE denuncia(
 	id INTEGER AUTO_INCREMENT PRIMARY KEY,

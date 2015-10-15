@@ -162,6 +162,8 @@ class VehiculoInfraccionTableSeeder extends Seeder {
                 $i = new App\Infraccion;
                 $i->descripcion = $f->text;
                 $i->fecha = $f->dateTimeThisYear;
+                $ti = App\Tipo_infraccion::orderByRaw("RAND()")->first();
+                $i->tipo_infraccion_id = $ti->id;
                 $v->dueno;
                 $i->persona()->associate($v->dueno);
                 $i->vehiculo()->associate($v);
@@ -289,7 +291,7 @@ class CaminoTableSeeder extends Seeder {
         $f = Faker\Factory::create('es_AR');
         $ls = App\Localidad::all();
         foreach ($ls as $i => $l) {
-            for($i=0; $i<20;$i++) {
+            for($i=0; $i<5;$i++) {
                 $c = new App\Camino;
                 $c->nombre = $f->streetName;
                 $c->longitud = $f->numerify('##00');
@@ -308,7 +310,6 @@ class CaminoTableSeeder extends Seeder {
 
 class CompaniaSeguroTableSeeder extends Seeder {
     public function run() {
-
         //DB::table('compania_seguro')->delete();
         $f = Faker\Factory::create('es_AR');
         for($i=0;$i<20;$i++) {
@@ -341,9 +342,7 @@ class LocalidadTableSeeder extends Seeder
 
 class PersonaCLTableSeeder extends Seeder {
     public function run(){
-
         //DB::table('persona_con_licencia')->delete();
-
         //DB::table('persona')->delete();
         $f = Faker\Factory::create('es_AR');
         for($i=0; $i<100; $i++) {
@@ -366,7 +365,6 @@ class PersonaCLTableSeeder extends Seeder {
 
 class ProvinciaTableSeeder extends Seeder {
     public function run(){
-
         //DB::table('provincia')->delete();
         $data = array('CABA','BUENOS AIRES','CATAMARCA','CORDOBA','CORRIENTES','CHACO','CHUBUT','ENTRE RIOS','FORMOSA','JUJUY','LA PAMPA','LA RIOJA','MENDOZA','MISIONES','NEUQUEN','RIO NEGRO','SALTA','SAN JUAN','SAN LUIS','SANTA CRUZ','SANTA FE','SANTIAGO DEL ESTERO','TUCUMAN','TIERRA DEL FUEGO');
         foreach($data as $prov) {
@@ -379,7 +377,6 @@ class ProvinciaTableSeeder extends Seeder {
 
 class TipoAccidenteTableSeeder extends Seeder {
     public function run(){
-
         //DB::table('tipo_accidente')->delete();
 
         $f = Faker\Factory::create('es_AR');

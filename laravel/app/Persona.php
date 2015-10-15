@@ -48,7 +48,7 @@ class Persona extends Model
     }
 
     public function siniestros(){
-        return $this->belongsToMany('App\Siniestro','involucrados');
+        return $this->belongsToMany('App\Siniestro','involucrados','persona_dni');
     }
 
 
