@@ -1,0 +1,33 @@
+use
+show database
+show databases
+use taller
+show databases
+db.taller
+db.taller.insert({lu:1, nombre:"Mongo",edad:9})
+db.taller.insert({lu:2, nombre:"Mongo2",edad:91})
+show taller
+show databases
+db.taller.find({edad:9})
+db.taller.find({edad:91})
+db.taller.find({edad:{$gte:1,$lt:99}})
+db.taller.insert({lu:2, nombre:"Mongo2",edad:91,cursos:[{nro:1,nombre:"Algebra"},{nro:3,nombre:"TLP"}],telefonos:[1234,1122,4321]})
+db.taller.insert({lu:11, nombre:"Mongo22",edad:18,cursos:[{nro:55,nombre:"Algebra Lineal"},{nro:3,nombre:"TLP"}],telefonos:[1234,1122,4321]})
+db.taller.find({cursos:{nro:55}})
+db.taller.find({edad:91})
+db.taller.find({cursos:{nro:55}})
+db.taller.find({nro:55})
+db.taller.find({cursos.nro:55}})
+db.taller.find({cursos.nro:55})
+db.taller.find({cursos:{$elemMatch: 55}})
+db.taller.find({cursos:{$elemMatch: {nro:55}}})
+db.taller.insert({nroLegajo:1, nombre:"Juan",cargo:"JTP"})
+db.taller.insert({nroLegajo:2, nombre:"Juan Ca",cargo:"Profesor"})
+db.taller.insert({nroLegajo:3, nombre:"María DB",cargo:"Ayudante 2da"})
+db.taller.aggregate([{$group:{_id:"$cargo",count:{$sum:1}}}])
+db.taller.insert({nroLegajo:4, nombre:"María S DB",cargo:"Ayudante 2da"})
+db.taller.aggregate([{$group:{_id:"$cargo",count:{$sum:1}}}])
+quit
+use taller
+show databases
+db.taller.find({cursos:{$elemMatch: {nro:55}}})
