@@ -150,7 +150,9 @@ CREATE TABLE denuncia(
 	id INTEGER AUTO_INCREMENT PRIMARY KEY,
 	fecha DATETIME,
 	comisaria_nro INTEGER NOT NULL,
-	FOREIGN KEY(comisaria_nro) REFERENCES comisaria(numero)
+	comisaria_direccion_altura INTEGER,
+	comisaria_direccion_camino_id INTEGER,	
+	FOREIGN KEY(comisaria_nro,direccion_altura,direccion_camino_id) REFERENCES comisaria(numero,direccion_altura,direccion_camino_id)
 ); 
 
 CREATE TABLE colision(
@@ -196,6 +198,7 @@ CREATE TABLE involucrados(
 	siniestro_id INTEGER NOT NULL,
 	vehiculo_matricula CHAR(6) NOT NULL,
 	persona_dni INTEGER NOT NULL,
+	PRIMARY KEY(siniestro_id,persona_dni),
 	FOREIGN KEY(siniestro_id) REFERENCES siniestro(id),
 	FOREIGN KEY(vehiculo_matricula) REFERENCES vehiculo(matricula),
 	FOREIGN KEY(persona_dni) REFERENCES persona(dni)
