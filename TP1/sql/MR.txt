@@ -5,7 +5,8 @@ CK = { id_tipoDelito, nombre, descripcion }
 
 Antecedente(id_antecedente, descripción, fecha, id_tipoDelito, dni)
 PK = { id_antecedente }
-CK = { (id_antecedente, id_tipoDelito, dni), (descripcion, fecha, id_tipoDelito, dni) }
+CK = { (id_antecedente, id_tipoDelito, dni),
+       (descripcion, fecha, id_tipoDelito, dni) }
 FK = { id_tipoDelito, dni }
 
 Persona(documento, tipo_documento, nacionalidad, nombre, apellido)
@@ -66,7 +67,8 @@ tipo_infraccion(id, nombre, descripcion)
 PK = { id }
 CK = { id, (nombre, descripcion) } 
 
-infraccion(id, descripcion, fecha, vehiculo_matricula, dni, 	direccion_altura, direccion_camino_id, tipo_infraccion_id)
+infraccion(id, descripcion, fecha, vehiculo_matricula,
+           dni, direccion_altura, direccion_camino_id, tipo_infraccion_id)
 PK = { id }
 CK = { id, (dni, direccion_altura, direccion_camino_id, vehiculo_matricula, tipo_infraccion_id) }
 FK = { dni, (direccion_altura, direccion_camino_id), vehiculo_matricula, tipo_infraccion_id }
@@ -102,47 +104,55 @@ PK = { id }
 CK = { id, (descripcion, fecha_hora, tipo_falla_id, tipo_accidente_id, denuncia_id, colision_id, direccion_altura, direccion_camino_id) }
 FK = { tipo_accidente_id, tipo_falla_id, denuncia_id, colision_id, (direccion_altura, direccion_camino_id) }
 
-----------------------------------------------
 peritaje(id, fecha, descripcion, conclusion, tipo_peritaje_id, siniestro_id)
 PK = { id }
-CK = 
+CK = { id, (fecha, descripcion, conclusion, tipo_peritaje_id, siniestro_id) } 
 FK = { tipo_peritaje_id, siniestro_id }
 
 involucrados(siniestro_id, vehiculo_matricula, persona_dni)
+PK = { (siniestro_id, persona_dni) }
 CK = { (siniestro_id, persona_dni), (siniestro_id, vehiculo_matricula) }
-PK = (siniestro_id, persona_dni)
 FK = { siniestro_id, vehiculo_matricula, persona_dni }
 
 conclusion(id, conclusion_final, siniestro_id)
-CK = PK = id
+PK = { id }
+CK = { id, (conclusion_final, siniestro_id) }
 FK = { siniestro_id }
 
 victima(conclusion_id, dni)
-CK = PK = (conclusion_id, dni)
+PK = (conclusion_id, dni)
+CK = { (conclusion_id, dni) }
 FK = { conclusion_id, dni }
 
 victimario(conclusion_id, dni)
-CK = PK = (conclusion_id, dni)
+PK = (conclusion_id, dni)
+CK = { (conclusion_id, dni) }
 FK = { conclusion_id, dni }
 
 testigos(siniestro_id, dni)
-CK = FK = (siniestro_id, dni)
-FK = { dni, siniestro_id }
+PK = (conclusion_id, dni)
+CK = { (conclusion_id, dni) }
+FK = { conclusion_id, dni }
 
 provincia(id, nombre)
-CK = PK = id
+CK = { id, nombre }
+PK = { id }
 
 localidad(id, nombre, provincia_id)
-CK = PK = id
+CK = { id, (nombre, provincia_id) } 
+PK = { id }
 FK = { provincia_id }
 
 registro_calles(camino_id, localidad_id, altura_desde, altura_hasta)
-CK = PK = (camino_id, localidad_id)
+PK = (camino_id, localidad_id)
+CK = { (camino_id, localidad_id) }
 FK = { camino_id, localidad_id }
 
 tipo_camino(id, nombre)
-CK = PK = id
+PK = { id }
+CK = { id, nombre } 
 
 clasificacion_camino(camino_id, tipo_id, altura_hasta, altura_desde, longitud)
-CK = PK = (camino_id, tipo_id, altura_desde, altura_hasta)
+PK = (camino_id, tipo_id, altura_desde, altura_hasta)
+CK = { (camino_id, tipo_id, altura_desde, altura_hasta) } 
 FK = { camino_id, tipo_id }
