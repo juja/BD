@@ -26,7 +26,8 @@ CK=PK=matricula
 FK={dni,tipo_id,categoria_id}
 
 registro_automotor(dni,matricula,cedula_codigo)
-CK=PK=(dni,cedula_codigo)
+CK={(dni,cedula_codigo),(dni,matricula),(matricula,cedula_codigo)}
+PK=(dni,cedula_codigo)
 FK={dni,matricula,cedula_codigo}
 
 tipo_cobertura(id,nombre,descripcion)

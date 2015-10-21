@@ -121,7 +121,7 @@ CREATE TABLE infraccion(
 	direccion_camino_id INTEGER NOT NULL,
 	tipo_infraccion_id INTEGER NOT NULL,
 	FOREIGN KEY(tipo_infraccion_id) REFERENCES tipo_infraccion(id),
-	FOREIGN KEY(dni) REFERENCES persona(dni),
+	FOREIGN KEY(dni) REFERENCES persona(dni),	
 	FOREIGN KEY(direccion_altura,direccion_camino_id) REFERENCES direccion(altura,camino_id),
 	FOREIGN KEY(vehiculo_matricula) REFERENCES vehiculo(matricula)
 );
