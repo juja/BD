@@ -76,31 +76,37 @@ PK = { id }
 CK = { id, nombre, descripcion }
 
 tipo_falla_humana (id,nombre, descripcion)
-CK = { id, nombre, descripcion }
 PK = { id }
+CK = { id, nombre, descripcion }
 
-----------------------------------------------
 comisaria(numero,direccion_altura,direccion_camino_id)
-CK=PK=(numero,direccion_altura,direccion_camino_id)
-FK={(direccion_altura,direccion_camino_id)}
+PK = { (numero, direccion_altura, direccion_camino_id) }
+CK = { (numero, direccion_altura, direccion_camino_id) }
+FK = { (direccion_altura, direccion_camino_id) }
 
-denuncia(id,fecha,comisaria_nro,comisaria_direccion_altura,comisaria_direccion_camino_id) 
-CK=PK=id
-FK={comisaria_nro,comisaria_direccion_altura,comisaria_direccion_camino_id}
+denuncia(id, fecha, comisaria_nro, comisaria_direccion_altura, comisaria_direccion_camino_id) 
+PK = { id }
+CK = { id, (fecha, comisaria_nro, comisaria_direccion_altura, comisaria_direccion_camino_id)) }
+FK = {comisaria_nro,comisaria_direccion_altura,comisaria_direccion_camino_id}
 
 colision(id,descripcion)
-CK=PK=id
+PK = { id }
+CK = { id, descripcion } 
 
 tipo_peritaje(id,nombre,descripcion)
-CK=PK=id
+PK = { id }
+CK = { id, nombre, descripcion }
 
 siniestro(id,descripcion,fecha_hora,tipo_falla_id,tipo_accidente_id, denuncia_id,colision_id,direccion_altura,direccion_camino_id)
-CK=PK=id
-FK={tipo_accidente_id,tipo_falla_id,denuncia_id,colision_id,(direccion_altura,direccion_camino_id)}
+PK = { id }
+CK = { id, (descripcion,fecha_hora,tipo_falla_id,tipo_accidente_id, denuncia_id,colision_id,direccion_altura,direccion_camino_id) }
+FK = { tipo_accidente_id, tipo_falla_id, denuncia_id, colision_id, (direccion_altura,direccion_camino_id) }
 
+----------------------------------------------
 peritaje(id,fecha,descripcion,conclusion,tipo_peritaje_id,siniestro_id)
-CK=PK=id
-FK={tipo_peritaje_id,siniestro_id}
+PK = { id }
+CK = 
+FK = {tipo_peritaje_id,siniestro_id}
 
 involucrados(siniestro_id, vehiculo_matricula, persona_dni)
 CK={(siniestro_id,persona_dni),(siniestro_id,vehiculo_matricula)}
