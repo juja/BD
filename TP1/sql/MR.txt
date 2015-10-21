@@ -1,65 +1,85 @@
-persona(dni,nacionalidad,nombre,apellido)
-CK=PK=dni
 
-tipo_delito(id,nombre,descripcion)
-CK=PK=id
+TipoDelito(id_tipoDelito,nombre,descripcion)
+PK = {id_tipoDelito}
+CK = {id_tipoDelito, nombre, descripcion}
 
-antecedente(id,descripcion,fecha,tipo_delito_id,dni)
-CK=PK=id
-FK={tipo_delito_id,dni}
+Antecedente(id_antecedente,descripción,fecha,id_tipoDelito, dni)
+PK = {id_antecedente}
+CK = {(id_antecedente, id_tipoDelito, dni), (descripcion, fecha, id_tipoDelito, dni)}
+FK = {id_tipoDelito, dni}
 
-persona_con_licencia(dni,fecha_vencimiento)
-CK=PK=dni
-FK={dni}
+Persona(documento,tipo_documento,nacionalidad,nombre,apellido)
+PK = {documento}
+CK = {documento}
+
+Persona_con_licencia(dni,fecha_vencimiento)
+PK = {dni}
+CK = {dni}
+FK = {dni}
 
 cedula_vehicular(codigo,tipo_cedula)
-CK=PK=codigo
+PK = {codigo}
+CK = {codigo}
 
 tipo_vehiculo(id,nombre)
-CK=PK=id
+PK = {id}
+CK = {id, nombre}
 
 categoria_vehiculo(id,nombre)
-CK=PK=id
+PK = {id}
+CK = {id, nombre}
 
 vehiculo(matricula,modelo,detalle,tipo_id,categoria_id,dni)
-CK=PK=matricula
-FK={dni,tipo_id,categoria_id}
+PK = {matricula}
+CK = {matricula}
+FK = {dni,tipo_id,categoria_id}
 
 registro_automotor(dni,matricula,cedula_codigo)
-CK={(dni,cedula_codigo),(dni,matricula),(matricula,cedula_codigo)}
-PK=(dni,cedula_codigo)
-FK={dni,matricula,cedula_codigo}
+PK = {(dni,cedula_codigo)}
+CK = {(dni,cedula_codigo),(dni,matricula),(matricula,cedula_codigo)}
+FK = {dni,matricula,cedula_codigo}
 
 tipo_cobertura(id,nombre,descripcion)
-CK=PK=id
+PK = {id}
+CK = {id, (nombre, descripcion)}
 
 compania_seguro(id,nombre,descripcion)
-CK=PK=id
+PK = {id}
+CK = {id, nombre}
 
 cobertura(vehiculo_matricula,tipo_id,compania_id)
-CK=PK=(vehiculo_matricula,tipo_id,compania_id)
-FK={vehiculo_matricula,tipo_id,compania_id}
+PK = { (vehiculo_matricula, tipo_id, compania_id) }
+CK = { (vehiculo_matricula, tipo_id, compania_id) }
+FK = { (vehiculo_matricula, tipo_id, compania_id) }
 
 camino(id,nombre,longitud)
-CK=PK=id
-
+PK = {id}
+CK = {id}
+// RESTRICCIÓN: Dos caminos en una misma localidad no pueden tener el mismo nombre.
+ 
 direccion(altura,camino_id,esquina_camino_id)
-CK=PK=(altura,camino_id)
-FK{camino_id,esquina_camino_id}
+PK = { (altura, camino_id) }
+CK = { (altura, camino_id) }
+FK = {camino_id, esquina_camino_id}
 
 tipo_infraccion(id,nombre,descripcion)
-CK=PK=id
+PK = { id }
+CK = { id, (nombre, descripcion) } 
 
 infraccion(id,descripcion,fecha,vehiculo_matricula,dni,	direccion_altura,direccion_camino_id,tipo_infraccion_id)
-CK=PK=id
-FK={dni,(direccion_altura,direccion_camino_id),vehiculo_matricula,tipo_infraccion_id}
+PK = { id }
+CK = { id, (dni, direccion_altura, direccion_camino_id, vehiculo_matricula, tipo_infraccion_id) }
+FK = { dni, (direccion_altura, direccion_camino_id), vehiculo_matricula, tipo_infraccion_id }
 
 tipo_accidente(id, nombre, descripcion)
-CK=PK=id
+PK = { id }
+CK = { id, nombre, descripcion }
 
 tipo_falla_humana (id,nombre, descripcion)
-CK=PK=id
+CK = { id, nombre, descripcion }
+PK = { id }
 
+----------------------------------------------
 comisaria(numero,direccion_altura,direccion_camino_id)
 CK=PK=(numero,direccion_altura,direccion_camino_id)
 FK={(direccion_altura,direccion_camino_id)}
