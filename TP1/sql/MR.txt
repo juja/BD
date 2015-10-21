@@ -1,72 +1,72 @@
 
-TipoDelito(id_tipoDelito,nombre,descripcion)
-PK = {id_tipoDelito}
-CK = {id_tipoDelito, nombre, descripcion}
+TipoDelito(id_tipoDelito, nombre, descripcion)
+PK = { id_tipoDelito }
+CK = { id_tipoDelito, nombre, descripcion }
 
-Antecedente(id_antecedente,descripción,fecha,id_tipoDelito, dni)
-PK = {id_antecedente}
-CK = {(id_antecedente, id_tipoDelito, dni), (descripcion, fecha, id_tipoDelito, dni)}
-FK = {id_tipoDelito, dni}
+Antecedente(id_antecedente, descripción, fecha, id_tipoDelito, dni)
+PK = { id_antecedente }
+CK = { (id_antecedente, id_tipoDelito, dni), (descripcion, fecha, id_tipoDelito, dni) }
+FK = { id_tipoDelito, dni }
 
-Persona(documento,tipo_documento,nacionalidad,nombre,apellido)
-PK = {documento}
-CK = {documento}
+Persona(documento, tipo_documento, nacionalidad, nombre, apellido)
+PK = { documento }
+CK = { documento }
 
-Persona_con_licencia(dni,fecha_vencimiento)
-PK = {dni}
-CK = {dni}
-FK = {dni}
+Persona_con_licencia(dni, fecha_vencimiento)
+PK = { dni }
+CK = { dni }
+FK = { dni }
 
-cedula_vehicular(codigo,tipo_cedula)
-PK = {codigo}
-CK = {codigo}
+cedula_vehicular(codigo, tipo_cedula)
+PK = { codigo }
+CK = { codigo }
 
-tipo_vehiculo(id,nombre)
-PK = {id}
-CK = {id, nombre}
+tipo_vehiculo(id, nombre)
+PK = { id }º
+CK = { id, nombre }
 
-categoria_vehiculo(id,nombre)
-PK = {id}
-CK = {id, nombre}
+categoria_vehiculo(id, nombre)
+PK = { id }
+CK = { id, nombre }
 
-vehiculo(matricula,modelo,detalle,tipo_id,categoria_id,dni)
-PK = {matricula}
-CK = {matricula}
-FK = {dni,tipo_id,categoria_id}
+vehiculo(matricula, modelo, detalle, tipo_id, categoria_id, dni)
+PK = { matricula }
+CK = { matricula }
+FK = { dni, tipo_id, categoria_id }
 
-registro_automotor(dni,matricula,cedula_codigo)
-PK = {(dni,cedula_codigo)}
-CK = {(dni,cedula_codigo),(dni,matricula),(matricula,cedula_codigo)}
-FK = {dni,matricula,cedula_codigo}
+registro_automotor(dni, matricula, cedula_codigo)
+PK = { (dni, cedula_codigo) }
+CK = { (dni, cedula_codigo), (dni, matricula), (matricula, cedula_codigo) }
+FK = { dni, matricula, cedula_codigo }
 
-tipo_cobertura(id,nombre,descripcion)
-PK = {id}
-CK = {id, (nombre, descripcion)}
+tipo_cobertura(id, nombre, descripcion)
+PK = { id }
+CK = { id, (nombre, descripcion) }
 
-compania_seguro(id,nombre,descripcion)
-PK = {id}
-CK = {id, nombre}
+compania_seguro(id, nombre, descripcion)
+PK = { id }
+CK = { id, nombre }
 
-cobertura(vehiculo_matricula,tipo_id,compania_id)
+cobertura(vehiculo_matricula, tipo_id, compania_id)
 PK = { (vehiculo_matricula, tipo_id, compania_id) }
 CK = { (vehiculo_matricula, tipo_id, compania_id) }
 FK = { (vehiculo_matricula, tipo_id, compania_id) }
 
-camino(id,nombre,longitud)
-PK = {id}
-CK = {id}
+camino(id, nombre, longitud)
+PK = { id }
+CK = { id }
 // RESTRICCIÓN: Dos caminos en una misma localidad no pueden tener el mismo nombre.
  
-direccion(altura,camino_id,esquina_camino_id)
+direccion(altura, camino_id, esquina_camino_id)
 PK = { (altura, camino_id) }
 CK = { (altura, camino_id) }
-FK = {camino_id, esquina_camino_id}
+FK = { camino_id, esquina_camino_id }
 
-tipo_infraccion(id,nombre,descripcion)
+tipo_infraccion(id, nombre, descripcion)
 PK = { id }
 CK = { id, (nombre, descripcion) } 
 
-infraccion(id,descripcion,fecha,vehiculo_matricula,dni,	direccion_altura,direccion_camino_id,tipo_infraccion_id)
+infraccion(id, descripcion, fecha, vehiculo_matricula, dni, 	direccion_altura, direccion_camino_id, tipo_infraccion_id)
 PK = { id }
 CK = { id, (dni, direccion_altura, direccion_camino_id, vehiculo_matricula, tipo_infraccion_id) }
 FK = { dni, (direccion_altura, direccion_camino_id), vehiculo_matricula, tipo_infraccion_id }
@@ -75,11 +75,11 @@ tipo_accidente(id, nombre, descripcion)
 PK = { id }
 CK = { id, nombre, descripcion }
 
-tipo_falla_humana (id,nombre, descripcion)
+tipo_falla_humana (id, nombre, descripcion)
 PK = { id }
 CK = { id, nombre, descripcion }
 
-comisaria(numero,direccion_altura,direccion_camino_id)
+comisaria(numero, direccion_altura, direccion_camino_id)
 PK = { (numero, direccion_altura, direccion_camino_id) }
 CK = { (numero, direccion_altura, direccion_camino_id) }
 FK = { (direccion_altura, direccion_camino_id) }
@@ -87,62 +87,62 @@ FK = { (direccion_altura, direccion_camino_id) }
 denuncia(id, fecha, comisaria_nro, comisaria_direccion_altura, comisaria_direccion_camino_id) 
 PK = { id }
 CK = { id, (fecha, comisaria_nro, comisaria_direccion_altura, comisaria_direccion_camino_id)) }
-FK = {comisaria_nro,comisaria_direccion_altura,comisaria_direccion_camino_id}
+FK = { comisaria_nro, comisaria_direccion_altura, comisaria_direccion_camino_id }
 
-colision(id,descripcion)
+colision(id, descripcion)
 PK = { id }
 CK = { id, descripcion } 
 
-tipo_peritaje(id,nombre,descripcion)
+tipo_peritaje(id, nombre, descripcion)
 PK = { id }
 CK = { id, nombre, descripcion }
 
-siniestro(id,descripcion,fecha_hora,tipo_falla_id,tipo_accidente_id, denuncia_id,colision_id,direccion_altura,direccion_camino_id)
+siniestro(id, descripcion, fecha_hora, tipo_falla_id, tipo_accidente_id, denuncia_id, colision_id, direccion_altura, direccion_camino_id)
 PK = { id }
-CK = { id, (descripcion,fecha_hora,tipo_falla_id,tipo_accidente_id, denuncia_id,colision_id,direccion_altura,direccion_camino_id) }
-FK = { tipo_accidente_id, tipo_falla_id, denuncia_id, colision_id, (direccion_altura,direccion_camino_id) }
+CK = { id, (descripcion, fecha_hora, tipo_falla_id, tipo_accidente_id, denuncia_id, colision_id, direccion_altura, direccion_camino_id) }
+FK = { tipo_accidente_id, tipo_falla_id, denuncia_id, colision_id, (direccion_altura, direccion_camino_id) }
 
 ----------------------------------------------
-peritaje(id,fecha,descripcion,conclusion,tipo_peritaje_id,siniestro_id)
+peritaje(id, fecha, descripcion, conclusion, tipo_peritaje_id, siniestro_id)
 PK = { id }
 CK = 
-FK = {tipo_peritaje_id,siniestro_id}
+FK = { tipo_peritaje_id, siniestro_id }
 
 involucrados(siniestro_id, vehiculo_matricula, persona_dni)
-CK={(siniestro_id,persona_dni),(siniestro_id,vehiculo_matricula)}
-PK=(siniestro_id,persona_dni)
-FK={siniestro_id, vehiculo_matricula, persona_dni}
+CK = { (siniestro_id, persona_dni), (siniestro_id, vehiculo_matricula) }
+PK = (siniestro_id, persona_dni)
+FK = { siniestro_id, vehiculo_matricula, persona_dni }
 
-conclusion(id,conclusion_final,siniestro_id)
-CK=PK=id
-FK={siniestro_id}
+conclusion(id, conclusion_final, siniestro_id)
+CK = PK = id
+FK = { siniestro_id }
 
-victima(conclusion_id,dni)
-CK=PK=(conclusion_id,dni)
-FK={conclusion_id,dni}
+victima(conclusion_id, dni)
+CK = PK = (conclusion_id, dni)
+FK = { conclusion_id, dni }
 
-victimario(conclusion_id,dni)
-CK=PK=(conclusion_id,dni)
-FK={conclusion_id,dni}
+victimario(conclusion_id, dni)
+CK = PK = (conclusion_id, dni)
+FK = { conclusion_id, dni }
 
-testigos(siniestro_id,dni)
-CK=FK=(siniestro_id,dni)
-FK={dni,siniestro_id}
+testigos(siniestro_id, dni)
+CK = FK = (siniestro_id, dni)
+FK = { dni, siniestro_id }
 
-provincia(id,nombre)
-CK=PK=id
+provincia(id, nombre)
+CK = PK = id
 
-localidad(id,nombre,provincia_id)
-CK=PK=id
-FK={provincia_id}
+localidad(id, nombre, provincia_id)
+CK = PK = id
+FK = { provincia_id }
 
-registro_calles(camino_id,localidad_id,altura_desde,altura_hasta)
-CK=PK=(camino_id,localidad_id)
-FK={camino_id,localidad_id}
+registro_calles(camino_id, localidad_id, altura_desde, altura_hasta)
+CK = PK = (camino_id, localidad_id)
+FK = { camino_id, localidad_id }
 
-tipo_camino(id,nombre)
-CK=PK=id
+tipo_camino(id, nombre)
+CK = PK = id
 
-clasificacion_camino(camino_id,tipo_id,altura_hasta,altura_desde,longitud)
-CK=PK=(camino_id,tipo_id,altura_desde,altura_hasta)
-FK={camino_id,tipo_id}
+clasificacion_camino(camino_id, tipo_id, altura_hasta, altura_desde, longitud)
+CK = PK = (camino_id, tipo_id, altura_desde, altura_hasta)
+FK = { camino_id, tipo_id }

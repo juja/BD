@@ -25,5 +25,9 @@ class Infraccion extends Model
         return $this->belongsTo('App\Persona','dni','dni');
     }
 
+    public function tipo_infraccion() {
+        return $this->belongsTo('App\Tipo_infraccion');
+    }
+
     //
 }

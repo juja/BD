@@ -46,7 +46,7 @@ class Siniestro extends Model
     }
 
     public function vehiculos_involucrados(){
-        return $this->belongsToMany('App\Vehiculo','involucrados');
+        return $this->belongsToMany('App\Vehiculo','involucrados','siniestro_id','vehiculo_matricula');
     }
 
 

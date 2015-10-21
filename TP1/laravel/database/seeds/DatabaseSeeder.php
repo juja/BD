@@ -325,7 +325,6 @@ class LocalidadTableSeeder extends Seeder
 {
     public function run()
     {
-
         //DB::table('localidad')->delete();
         $f = Faker\Factory::create('es_AR');
         $ps = App\Provincia::all();
