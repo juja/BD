@@ -1,0 +1,33 @@
+/* cliente */
+{
+	dni:	Integer,
+	nombre:	String,
+	edad:	Integer,
+	compra: [{cod_barras: Integer}]	
+}
+
+/* empleado */
+
+{
+	legajo:	Integer,
+	nombre:	String,
+	atendio:[{dni: Integer, edad: Integer}]
+	sectores:[{cod_sector: Integer	}]
+}
+
+/* articulos */
+
+{
+	cod_barras:	Integer,
+	nombre:		String
+	cli_compra: [ {dni: Integer},...]
+}
+
+/* sector */
+
+{
+	cod_sector:	Integer
+	empleados: [{ legajo: Integer, tarea: String}]
+}
+
+
