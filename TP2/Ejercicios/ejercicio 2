@@ -1,0 +1,32 @@
+// Ejercicio 2
+//./mongoimport --db local --collection my_collection2012 --jsonArray disposiciones_2012.json
+
+// Devolver la cantidad de disposiciones tipo resoluciones que se hayan realizado en Abril del 2013.
+
+map = function() { if (this.Tipo == 'Resoluciones' && this.Fecha.indexOf('-04-2012')!=-1) emit(this.Tipo,1); }
+reduce = function(key, values) { return Array.sum(values); } 
+
+db.my_collection2012.mapReduce(map, reduce, {out: "map_res_a"})
+
+
+// Devolver la cantidad de disposiciones por cada tipo definido
+
+map = function() { emit(this.Tipo,1); }
+reduce = function(key, values) { return Array.sum(values); } 
+
+db.my_collection2012.mapReduce(map, reduce, {out: "map_res_b"})
+
+
+// Devolver la fecha más citada para todos los informes. Descartar las fechas embebidas en descripción
+
+map = function() { emit(this.Fecha,1); }
+reduce = function(key, values) { return Array.sum(values); } 
+
+db.my_collection2012.mapReduce(map, reduce, {out: "map_res_c"})
+
+// Devolver la mayor cantidad de páginas utilizadas por cada tipo de disposición. 
+
+map = function(){ emit(this.Tipo,  this.PaginaFinal -  this.PaginaInicial)}
+reduce = function(key, values){ return Array.max(values) }
+
+db.my_collection2012.mapReduce(map, reduce, {out: "map_res_d"})

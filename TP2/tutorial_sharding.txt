@@ -1,32 +1,35 @@
 Tutorial para configurar Shards en Mongodb:
 ==========================================
 
+MATIAS: HACIENDO TODO ESTO EN LA CARPETA “BIN” DEL MONGO ANDA TODO OK.
+
 1) Crear los shards
 
-Para crear un shard realizar:
+Para crear dos shards realizando:
 	
-    * mkdir -p ./data/localhost10000
-    
-    * mongod --rest --shardsvr --port 10000 --dbpath data/localhost10000 --logpath data/localhost10000/log
+    mkdir -p ./data/localhost10000
+    mkdir -p ./data/localhost10001
+    ./mongod --rest --shardsvr --port 10000 --dbpath data/localhost10000 --logpath data/localhost10000/log
+    ./mongod --rest --shardsvr --port 10001 --dbpath data/localhost10001 --logpath data/localhost10001/log 
 
 Hacer esto según la cantidad de shards que se quiera tener incrementando el nombre del directorio y el puerto (ex. localhost10001). Dejar las instancias corriendo.
 
 2) Crear config server 
 
     * mkdir -p ./data/localhost10002
-    * mongod --rest --port 10002 --dbpath data/localhost10002 --logpath data/localhost10002/log
+    * ./mongod --rest --port 10002 --dbpath data/localhost10002 --logpath data/localhost10002/log
 
     Donde 10002 debe ser el puerto siguiente al último shard, ídem para el directorio.
 
 3) Crear routing service
 
-    * mongos --port 10003 --configdb localhost:10002 > run_routing_service_log
+    * ./mongos --port 10003 --configdb localhost:10002 > run_routing_service_log
 
     Donde 10002 es el puerto del config server utilizado en el Paso 2
 
 4) Agregando los Shards
 
-    * mongo localhost:10003
+    * ./mongo localhost:10003
 
     Donde localhost:10003 es el servicio de routing service
 
@@ -60,6 +63,9 @@ Hacer esto según la cantidad de shards que se quiera tener incrementando el nom
     * Insertar datos con respecto al esquema definido . Por ejemplo:
 
         * db.people.insert({"name": "a1", "password": "a1", .... )
+
+	
+	db.products.insert( { item: "card", qty: 15 } )
 
     * Verificar el estado con:
 
