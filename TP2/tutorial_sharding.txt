@@ -42,7 +42,8 @@ Hacer esto según la cantidad de shards que se quiera tener incrementando el nom
 5) Configurando los Shards
 
     * Crear una base de datos
-        * use test_sharding
+        * use test_shardingls
+
 
     * Habilitar sharding para la base de datos
 
@@ -50,32 +51,37 @@ Hacer esto según la cantidad de shards que se quiera tener incrementando el nom
 
     * Definir Index y seleccionarlo para sharding
 	
-	En este punto se puede elegir utilizar un indice simple (utilizando {"zip": 1}) o hasheado ({"_id": "hashed"}). 
+	En este punto se puede elegir utilizar un indice simple (utilizando {“codigo_postal”: 1}) o hasheado ({"_id": "hashed"}). 
 	El primero indexa directamente utilizando los valores que posee mientras que el otro aplica una función de hash para distribuir
 	los valores de mejor forma.
 
-        * db.people.ensureIndex({"zip": 1})
+        * db.personas.ensureIndex({“codigo_postal”: 1})
 
 	  (deprecado en la versión 3.0, si utiliza esta versión debería cambiar por el comando db.collection.createIndex())
 
-        * sh.shardCollection("test_sharding.people", {"zip": 1} )
+        * sh.shardCollection("test_sharding.personas”, {“zip”: 1} )
 
     * Insertar datos con respecto al esquema definido . Por ejemplo:
 
-        * db.people.insert({"name": "a1", "password": "a1", .... )
+        * db.personas.insert({nombre: "pepito", password: "pepa"+i, zip: cod_postal, 				genero: "Femenino", edad:34, 
+				fecha_creacion: new Date('Sep 04, 1927’)})
 
-	
 	db.products.insert( { item: "card", qty: 15 } )
 
-    * Verificar el estado con:
+	Para insertar los registros, ejecutar:
+	./mongo localhost:10003/test generate20000.js > outputSharding
+
+
+
+    * Verificar el estado con:    // Esto ya se hace en el script outputSharding
 
         *   sh.status()
     
-        *   db.people.getShardDistribution()
+        *   db.personas.getShardDistribution()
 
 	Ejemplo de output:
 
-	mongos> db.people.getShardDistribution()
+	mongos> db.personas.getShardDistribution()
 
 	Shard shard10000 at localhost:10000
 	 data : 1.98MiB docs : 20001 chunks : 1
